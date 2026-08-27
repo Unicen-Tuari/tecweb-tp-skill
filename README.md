@@ -53,9 +53,11 @@ Las reglas pedagógicas se armaron y probaron con simulaciones de alumnos (uno a
 "hacé todo de una", otro cooperativo) antes de esta versión. El contenido de `references/` se
 extrajo de las slides reales de la cátedra (carpeta de Drive de la materia), de la
 documentación oficial de NestJS y Angular, y de las 22 clases grabadas en el canal de YouTube de
-la cátedra (`videos-catedra.md`). Solo 1 de esos 22 videos se procesó con transcript completo —
-el resto son resúmenes inferidos de título/diapositivas, con su nivel de confianza marcado en
-cada entrada. Vale la pena que un docente los revise antes de darlos por definitivos.
+la cátedra (`videos-catedra.md`), procesadas a partir de su transcript/subtítulos completo (21
+vía el editor de YouTube Studio del canal, 1 vía el panel público de YouTube). Solo uno de los 22
+videos tiene timestamps exactos por segmento; el resto tiene timestamps aproximados, estimados
+proporcionalmente a partir del orden de los temas en el transcript (marcado así en cada entrada).
+Vale la pena que un docente los revise antes de darlos por definitivos.
 
 ## Mantenimiento
 
