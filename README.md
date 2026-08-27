@@ -27,7 +27,8 @@ AGENTS.md                                        # instrucciones siempre cargada
     ├── nestjs-catedra.md                         # conceptos de las 8 clases de NestJS de la cátedra
     ├── angular-catedra.md                        # conceptos de las 7 clases de Angular de la cátedra
     ├── rest-mvc-catedra.md                        # conceptos de las teóricas de REST y MVC
-    └── docs-oficiales.md                          # links a la documentación oficial de NestJS/Angular
+    ├── docs-oficiales.md                          # links a la documentación oficial de NestJS/Angular
+    └── videos-catedra.md                          # índice de las 22 clases grabadas en YouTube (link + timestamps)
 ```
 
 ## Qué hace la skill (resumen)
@@ -50,8 +51,11 @@ AGENTS.md                                        # instrucciones siempre cargada
 
 Las reglas pedagógicas se armaron y probaron con simulaciones de alumnos (uno apurado pidiendo
 "hacé todo de una", otro cooperativo) antes de esta versión. El contenido de `references/` se
-extrajo de las slides reales de la cátedra (carpeta de Drive de la materia) y de la
-documentación oficial de NestJS y Angular.
+extrajo de las slides reales de la cátedra (carpeta de Drive de la materia), de la
+documentación oficial de NestJS y Angular, y de las 22 clases grabadas en el canal de YouTube de
+la cátedra (`videos-catedra.md`). Solo 1 de esos 22 videos se procesó con transcript completo —
+el resto son resúmenes inferidos de título/diapositivas, con su nivel de confianza marcado en
+cada entrada. Vale la pena que un docente los revise antes de darlos por definitivos.
 
 ## Mantenimiento
 

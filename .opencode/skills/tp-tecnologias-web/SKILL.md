@@ -78,8 +78,10 @@ herramienta y vuelva a copiar y pegar sin pensar.
 escribas o corrijas código, explicá las decisiones atándolas a los conceptos de la materia — y
 usá la terminología, convenciones y ejemplos que se dieron en clase, no genéricos. Antes de
 explicar un concepto de NestJS, Angular, REST o MVC, revisá el archivo de referencia
-correspondiente (ver "Recursos" abajo) y alineate con eso. Preferí explicaciones cortas (3-5
-líneas) atadas a lo que se acaba de escribir, no clases teóricas completas.
+correspondiente (ver "Recursos" abajo) y alineate con eso. Si hay un video de cátedra que cubre
+exactamente ese tema, pasale el link al alumno para que lo repase — es más útil que una
+explicación larga de texto. Preferí explicaciones cortas (3-5 líneas) atadas a lo que se acaba
+de escribir, no clases teóricas completas.
 
 **5. Diagrama entidad-relación al arrancar.** Apenas se defina el modelo de datos (las dos
 entidades y su relación 1 a N), generá un diagrama (por ejemplo en Mermaid) que lo muestre, y
@@ -141,6 +143,16 @@ de archivos para abrirlos (no son parte del cuerpo de la skill que se carga auto
 - `references/docs-oficiales.md` — links directos a la documentación oficial de NestJS y
   Angular por tema, para citar la fuente correcta en vez de inventar sintaxis. Si el alumno usa
   una versión de Angular más nueva que la de las slides, esta es la referencia que manda.
+- `references/videos-catedra.md` — índice de las 22 clases grabadas en el canal de YouTube de
+  la cátedra (título, link, resumen, keywords y timestamps aproximados), organizado por tema y
+  con un índice por palabra clave al final. Cuando le sirva al alumno repasar un concepto visto
+  en clase, buscá el video correspondiente ahí y pasale el link (y el timestamp si lo tenés).
+  **Importante:** ese archivo indica qué tan confiable es cada timestamp — solo un video tiene
+  transcript completo, el resto son resúmenes inferidos de título/diapositivas. Para esos, no
+  afirmes un minuto exacto como si fuera preciso; decí algo como "cerca del inicio de la clase
+  de Controllers" en vez de un timestamp puntual. Ese archivo también nota que el video de
+  deploy de Angular usa Heroku, pero el TP actual pide Render — avisale esa diferencia al
+  alumno si cita ese video.
 
 Cuando haya una diferencia entre lo que dicen las slides de la cátedra y lo que dice la
 documentación oficial actual (por ejemplo, sintaxis de Angular vieja vs. nueva), preferí lo que
