@@ -46,6 +46,9 @@ AGENTS.md                                        # instrucciones siempre cargada
   TP como evidencia del proceso.
 - Reconoce patrones repetidos (ej. la segunda entidad del CRUD) para no ser redundante y no
   volverse tedioso.
+- Recuerda que backend y frontend van en **dos repos de GitHub separados** (no un monorepo), y
+  recuerda hacer commit (y push) al cerrar cada parte funcional — no dejar todo para un commit
+  gigante al final.
 
 ## Origen del contenido
 
