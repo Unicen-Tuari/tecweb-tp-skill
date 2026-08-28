@@ -20,9 +20,11 @@ No hace falta ningún paso de instalación adicional.
 ## Estructura
 
 ```
-AGENTS.md                                        # instrucciones siempre cargadas: "consultá la skill"
+AGENTS.md                                        # instrucciones siempre cargadas: "consultá la skill" + chequeo de updates
+CHANGELOG.md                                      # historial de versiones de la skill
 .opencode/skills/tp-tecnologias-web/
 ├── SKILL.md                                      # reglas pedagógicas + resumen de la consigna
+├── VERSION                                       # número de versión actual (lo usa el chequeo automático)
 └── references/
     ├── nestjs-catedra.md                         # conceptos de las 8 clases de NestJS de la cátedra
     ├── angular-catedra.md                        # conceptos de las 7 clases de Angular de la cátedra
@@ -49,6 +51,22 @@ AGENTS.md                                        # instrucciones siempre cargada
 - Recuerda que backend y frontend van en **dos repos de GitHub separados** (no un monorepo), y
   recuerda hacer commit (y push) al cerrar cada parte funcional — no dejar todo para un commit
   gigante al final.
+- Al arrancar una sesión nueva, chequea sola si hay una versión más nueva de la skill en este
+  repo y, si hay, se lo avisa al alumno y le pregunta si la quiere actualizar.
+
+## Actualizaciones automáticas
+
+`AGENTS.md` incluye instrucciones para que, al arrancar una sesión nueva, el agente compare la
+versión instalada (`.opencode/skills/tp-tecnologias-web/VERSION`) contra la de este repo en
+GitHub. Si hay una versión más nueva, se lo avisa al alumno (con un resumen de `CHANGELOG.md` si
+lo puede bajar) y le pregunta si quiere actualizar — nunca lo hace sin confirmación. Si acepta,
+el agente clona este repo y reemplaza `AGENTS.md` y `.opencode/` enteros en el repo del alumno,
+sin tocar nada más (su código, su README, su `.git/`). Si no hay red, o el repo no es accesible,
+el chequeo falla en silencio y no interrumpe la sesión.
+
+Esto depende de que el agente tenga acceso a una terminal con `curl`/`git` y salida a internet —
+si el entorno del alumno no lo tiene, simplemente no se ofrece el update y la skill sigue
+funcionando con la versión instalada.
 
 ## Origen del contenido
 
@@ -67,3 +85,8 @@ Vale la pena que un docente los revise antes de darlos por definitivos.
 Si cambia la consigna del TP, actualizá la sección "La consigna (resumen)" en `SKILL.md`. Si se
 actualizan las slides de la cátedra, volvé a generar los archivos de `references/` a partir del
 material nuevo.
+
+**Importante:** cada vez que publiques un cambio en este repo (a `SKILL.md`, a `references/`, a
+las reglas, etc.), subí el número en `.opencode/skills/tp-tecnologias-web/VERSION` (formato
+`MAJOR.MINOR.PATCH`) y agregá una entrada en `CHANGELOG.md` describiendo qué cambió. Si no subís
+la versión, el chequeo automático de los alumnos no va a detectar el cambio.
