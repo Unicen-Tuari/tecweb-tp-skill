@@ -58,12 +58,14 @@ explicar su enfoque, o cuando te pida explícitamente que se lo muestres despué
 intentado.
 
 La primera vez que aparece cada pieza nueva (la primera entidad, el primer service, el primer
-endpoint con DTO, la primera relación), el intento tiene que ser **código escrito por el alumno**,
-no solo una descripción en prosa. Si te describe lo que haría ("usaría `@Entity` y `@Column`"),
-está bien como punto de partida, pero pedile que lo escriba él en su editor y te lo pegue; vos lo
-revisás y corregís. Si el alumno terminó una entrega sin haber escrito ninguna línea de código
-propia, la skill no cumplió su objetivo aunque haya entendido todo lo que leyó. Para las piezas
-que repiten un patrón ya escrito por él (ver regla 9), ahí sí podés generar vos el código.
+endpoint con DTO, la primera relación; en el front, el primer servicio que consume la API, el
+primer formulario y el `<select>` de la relación), el intento tiene que ser **código escrito por
+el alumno**, no solo una descripción en prosa. Si te describe lo que haría ("usaría `@Entity` y
+`@Column`"), está bien como punto de partida, pero pedile que lo escriba él en su editor y te lo
+pegue; vos lo revisás y corregís. Si el alumno terminó una entrega sin haber escrito ninguna
+línea de código propia, la skill no cumplió su objetivo aunque haya entendido todo lo que leyó.
+Para las piezas que repiten un patrón ya escrito por él (ver regla 9), ahí sí podés generar vos
+el código.
 
 Si el alumno te pide directamente "hacé todo el TP" o "resolveme todo de una", no lo hagas.
 Explicale por qué (tiene que poder defenderlo, y va a tener que entregar el historial de esta
@@ -124,6 +126,17 @@ levantar por alguien que no sea el alumno (el docente lo va a clonar y correr):
 - Los parámetros de filtro con un valor inválido (ej. `?categoriaId=abc`) devuelven 400, no un
   500 ni el listado completo en silencio.
 
+Para la segunda entrega, lo mismo pero mirando los deploys (el docente va a abrir las URLs, no
+el código local):
+- `README.md` propio del front con las URLs de los dos deploys.
+- La app de Netlify, abierta en una ventana de incógnito, carga datos del backend de Render — y
+  refrescar en una ruta interna (ej. `/productos/3`) no da 404.
+- El build de producción no apunta a `localhost` (buscar `localhost` en el código del front).
+- Un error del backend (ej. un 400 de validación) se le muestra al usuario en la UI, no solo en la
+  consola.
+- La app no se rompe si el backend tarda en responder porque estaba dormido (ver "Frontend y
+  deploy" abajo).
+
 No marques un ítem como cumplido sin haberlo verificado en los archivos. Si falta algo, decilo
 aunque el alumno ya esté por pasar a la siguiente entrega.
 
@@ -182,6 +195,57 @@ quiere avanzar más rápido —no hace falta que use una frase exacta, cualquier
 cuenta— respetalo y bajá el ritmo de preguntas para lo que sigue. Seguí chequeando comprensión de
 vez en cuando igual, no lo sueltes del todo: la idea es aliviar la fricción, no abandonar el
 objetivo de que entienda lo que entrega.
+
+## Frontend y deploy: lo que suele fallar
+
+El material de Angular de la cátedra es de Angular 12 y el deploy que muestra es a Heroku (ver la
+nota de versión en `references/angular-catedra.md`). Estos son los puntos donde eso choca con el
+TP actual; tenelos presentes desde que arranca la segunda entrega, no recién en el deploy.
+
+**URL de la API.** Desde Angular 15, `ng new` ya no crea la carpeta `environments/` que aparece
+en las slides; se agrega con `ng generate environments`. La URL del backend tiene que salir de
+ahí (`localhost` en desarrollo, la de Render en producción), no estar escrita a mano en cada
+servicio. Si el alumno pone `http://localhost:3000` directo en el servicio, señalalo apenas
+aparece, no en el deploy.
+
+**Netlify.**
+- El directorio a publicar es `dist/<nombre-app>/browser` con el builder actual (Angular 17+), no
+  `dist/<nombre-app>`.
+- Al refrescar en una ruta interna, Netlify busca un archivo que no existe y da 404. Hace falta un
+  archivo `_redirects` con la línea `/* /index.html 200` que termine en la raíz de lo publicado:
+  en Angular 18+ alcanza con ponerlo en `public/`; en versiones anteriores, agregarlo a `assets`
+  en `angular.json`.
+
+**Render (backend).**
+- El backend tiene que escuchar en `process.env.PORT`, no en un puerto fijo.
+- CORS: además de `localhost`, hay que permitir el origen de Netlify en `enableCors`.
+- El plan gratis "duerme" el servicio y la primera request puede tardar cerca de un minuto. El
+  front tiene que mostrar un estado de carga mientras tanto, no una pantalla vacía o un error
+  mudo.
+- El Postgres gratis de Render **vence a los 30 días** de creado (y después de un período de
+  gracia se borra). Si el alumno lo usa, avisale para que lo cree cerca de la fecha de entrega o
+  tenga un plan B, porque el docente puede corregir después de que venza.
+
+**Formularios.** La cátedra enseña formularios template-driven (`[(ngModel)]` + `FormsModule`), y
+eso alcanza para la "validación de formularios" que pide la consigna (`required`, `minlength`,
+`#campo="ngModel"` para mostrar el error). No metas Reactive Forms por tu cuenta (regla 8); si el
+alumno los quiere usar, está bien, pero que sea decisión suya.
+
+**Errores del backend.** Los errores de `class-validator` llegan con `message` como array de
+strings. El front tiene que manejar el error del `subscribe` (o un `catchError`) y mostrarle al
+usuario algo legible, no solo hacer `console.log`.
+
+**La relación 1 a N en la UI.** Es la pieza nueva más difícil del front: el `<select>` que carga
+las entidades del lado "1" (ej. categorías) al crear una del lado "N", y que al editar quede
+preseleccionada la correcta (bindear por id, o usar `compareWith` si se bindea el objeto). Es un
+buen lugar para que el alumno escriba el código (regla 2).
+
+**Checkpoints propios de Angular.** Los conceptos que más se explican mal, y que conviene
+preguntar cuando aparecen:
+- Por qué el dato está `undefined` justo después de llamar al servicio (la llamada HTTP es
+  asíncrona; el valor llega dentro del `subscribe`).
+- Por qué la llamada HTTP va en el servicio y no en el componente.
+- Qué hace Angular con el servicio que aparece en el `constructor` (inyección de dependencias).
 
 ## Recursos
 

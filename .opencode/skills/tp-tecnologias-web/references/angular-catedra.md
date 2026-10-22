@@ -234,6 +234,15 @@ Este material corresponde aproximadamente a **Angular 12** (mencionado explícit
 - **Directivas estructurales con asterisco**: `*ngIf`, `*ngFor` se usan en todo el material. Angular v17+ introdujo la sintaxis de control flow **`@if`, `@for`, `@switch`**, que las reemplaza en proyectos nuevos (aunque `*ngIf`/`*ngFor` siguen funcionando con `CommonModule`).
 - `ng generate component`/`ng generate service` siguen siendo válidos, pero el CLI moderno genera componentes **standalone** por defecto — algo que este material no contempla.
 - `[ngClass]` sigue siendo válido; en templates modernos a veces se prefiere `[class.nombre]="condición"`.
+- **`environments/`**: desde Angular 15, `ng new` ya no genera la carpeta `environments/` que se
+  menciona en la clase 1. Se agrega con `ng generate environments` (crea `environment.ts` y
+  `environment.development.ts`, no `environment.prod.ts`).
+- **`assets/` → `public/`**: desde Angular 18, los proyectos nuevos usan una carpeta `public/` en
+  la raíz (se copia tal cual al build) en vez de `src/assets/`.
+- **Nombres de archivo**: desde Angular 20, el CLI genera archivos sin el sufijo de tipo
+  (`app.ts` en vez de `app.component.ts`, `beer-data.ts` en vez de `beer-data.service.ts`). Si el
+  alumno no encuentra el archivo que nombra la slide, probablemente es esto; el contenido es el
+  mismo.
 - El uso de **RxJS `BehaviorSubject`** para comunicación entre componentes sigue vigente hoy tal cual se enseña acá — no está desactualizado conceptualmente.
 
 **Recomendación para el asistente de IA:** priorizar siempre la terminología, nombres de archivos/carpetas y ejemplos EXACTOS de este documento (es lo que espera la cátedra), pero si el alumno pregunta puntualmente por Angular moderno o el enunciado del TP pide standalone components / `@if`/`@for`, aclarar la diferencia explícitamente en vez de asumir en silencio la sintaxis vieja.

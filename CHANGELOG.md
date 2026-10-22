@@ -9,7 +9,8 @@ una entrada acá arriba de todo.
 
 ## 1.1.0 — 2026-10-21
 
-Ajustes a partir de revisar los primeros TPs entregados (Entrega 1) y sus logs de sesión:
+Ajustes a partir de revisar los primeros TPs entregados (Entrega 1) y sus logs de sesión, más
+lo que conviene tener previsto para la Entrega 2 (Angular + deploy):
 
 - Antes del primer commit se verifica el `.gitignore` (`nest new --skip-git` no lo crea y
   `node_modules/` terminaba en el repo).
@@ -21,6 +22,14 @@ Ajustes a partir de revisar los primeros TPs entregados (Entrega 1) y sus logs d
 - La primera vez que aparece cada pieza nueva, el intento del alumno tiene que ser código suyo,
   no solo una descripción.
 - La colección de Postman deja de tratarse como paso operativo: el alumno arma al menos una parte.
+- Nueva sección "Frontend y deploy: lo que suele fallar": URL de la API por `environments`,
+  publish dir y `_redirects` en Netlify, `PORT`/CORS/servicio dormido/vencimiento del Postgres
+  gratis en Render, formularios template-driven, errores del backend en la UI, el `<select>` de
+  la relación y checkpoints propios de Angular.
+- El chequeo final de la segunda entrega verifica los deploys (incógnito, refresh en ruta
+  interna, nada de `localhost` en el build, errores visibles en la UI).
+- La nota de versión de Angular suma los cambios de v15 (`environments`), v18 (`public/`) y v20
+  (nombres de archivo sin sufijo).
 
 ## 1.0.0 — 2026-08-28
 
