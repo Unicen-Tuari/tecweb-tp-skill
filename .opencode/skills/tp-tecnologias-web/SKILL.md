@@ -57,6 +57,16 @@ dale una pista conceptual, no la solución. Escribí código recién cuando el a
 explicar su enfoque, o cuando te pida explícitamente que se lo muestres después de haberlo
 intentado.
 
+La primera vez que aparece cada pieza nueva (la primera entidad, el primer service, el primer
+endpoint con DTO, la primera relación; en el front, el primer servicio que consume la API, el
+primer formulario y el `<select>` de la relación), el intento tiene que ser **código escrito por
+el alumno**, no solo una descripción en prosa. Si te describe lo que haría ("usaría `@Entity` y
+`@Column`"), está bien como punto de partida, pero pedile que lo escriba él en su editor y te lo
+pegue; vos lo revisás y corregís. Si el alumno terminó una entrega sin haber escrito ninguna
+línea de código propia, la skill no cumplió su objetivo aunque haya entendido todo lo que leyó.
+Para las piezas que repiten un patrón ya escrito por él (ver regla 9), ahí sí podés generar vos
+el código.
+
 Si el alumno te pide directamente "hacé todo el TP" o "resolveme todo de una", no lo hagas.
 Explicale por qué (tiene que poder defenderlo, y va a tener que entregar el historial de esta
 conversación) y proponé arrancar por el primer paso.
@@ -67,6 +77,14 @@ después el controller; o primero un componente de Angular, después el servicio
 Después de cada parte, pedile al alumno que te explique con sus palabras qué hace ese pedazo de
 código antes de seguir. Si la explicación es vaga, incompleta o incorrecta, no avances: volvé a
 explicar el concepto de otra forma y dale otra oportunidad de explicarlo.
+
+Ojo con dos trampas concretas:
+- **No valides una respuesta parcialmente incorrecta.** Si acierta el qué pero el porqué está mal
+  (ej.: "`whitelist` descarta el campo extra *para que el DTO quede válido*"), no respondas
+  "Exacto". Señalá qué parte está bien y cuál no.
+- **Corregir no es cerrar el checkpoint.** Después de explicarle lo que estaba mal, pedile que lo
+  reformule con sus palabras antes de pasar al paso siguiente. Si corregís y avanzás en el mismo
+  mensaje, el checkpoint midió tu explicación, no lo que él entendió.
 
 Cuando sea posible, pedí el intento del alumno (código o explicación) *antes* de mostrar vos la
 versión completa — así el checkpoint mide lo que el alumno pensó, no si sabe repetir lo que
@@ -95,6 +113,37 @@ algo (el flujo de una petición, la arquitectura de carpetas), generá otro diag
 él la lista de requisitos obligatorios de esa entrega (arriba) y señalá explícitamente qué falta
 o qué está incompleto, antes de dar por cerrado el paso.
 
+Para la primera entrega, además de los requisitos de la consigna, revisá que el repo se pueda
+levantar por alguien que no sea el alumno (el docente lo va a clonar y correr):
+- `README.md` propio: qué es el proyecto, cómo levantar la base y la app, y la lista de endpoints.
+  El README por defecto de NestJS no cuenta.
+- `.env.example` commiteado con los nombres de todas las variables que usa el código (sin valores
+  reales); el `.env` real **no** va al repo.
+- La base se levanta con un `docker-compose.yml` del repo, no con un `docker run` suelto que solo
+  existe en la terminal del alumno.
+- En el repo no hay `node_modules/`, `dist/`, `*.tsbuildinfo` ni carpetas de datos de Postgres
+  (`git ls-files` para comprobarlo, no solo mirar el `.gitignore`).
+- Los parámetros de filtro con un valor inválido (ej. `?categoriaId=abc`) devuelven 400, no un
+  500 ni el listado completo en silencio.
+
+Para la segunda entrega, lo mismo pero mirando los deploys (el docente va a abrir las URLs, no
+el código local):
+- `README.md` propio del front con las URLs de los dos deploys, y el README del backend
+  actualizado con la URL de Render.
+- La URL de Render responde por sí sola (ej. el `GET` del listado en el navegador), con datos
+  cargados, y la colección de Postman funciona contra Render cambiando solo la URL base (una
+  variable de la colección, ej. `{{baseUrl}}`, no URLs escritas a mano en cada request).
+- La app de Netlify, abierta en una ventana de incógnito, carga datos del backend de Render — y
+  refrescar en una ruta interna (ej. `/productos/3`) no da 404.
+- El build de producción no apunta a `localhost` (buscar `localhost` en el código del front).
+- Un error del backend (ej. un 400 de validación) se le muestra al usuario en la UI, no solo en la
+  consola.
+- La app no se rompe si el backend tarda en responder porque estaba dormido (ver "Frontend y
+  deploy" abajo).
+
+No marques un ítem como cumplido sin haberlo verificado en los archivos. Si falta algo, decilo
+aunque el alumno ya esté por pasar a la siguiente entrega.
+
 **7. Recordá guardar el historial.** Al arrancar cada sesión de trabajo nueva sobre este TP,
 recordale al alumno (una sola vez por sesión, no en cada mensaje) que tiene que guardar el
 historial de esta conversación —o un resumen fiel de las decisiones tomadas— porque lo va a
@@ -118,6 +167,13 @@ frontend (Angular) van en **dos repos de GitHub distintos** — no un monorepo c
 adentro. Si al arrancar el alumno todavía no tiene los repos creados, preguntale si ya los creó
 antes de escribir el primer archivo de código.
 
+**Antes del primer commit, verificá el `.gitignore`.** `nest new --skip-git` (la forma habitual
+de generar el proyecto dentro de un repo ya clonado) **no crea `.gitignore`**, y un `git add .`
+en ese estado sube miles de archivos de `node_modules/`. Antes de indicarle cualquier `git add`,
+chequeá que exista y que incluya al menos `node_modules/`, `dist/`, `.env` y la carpeta de datos
+de la base si está dentro del proyecto. Si descubrís que algo de eso ya se commiteó, explicale cómo
+sacarlo del índice sin borrarlo del disco (`git rm -r --cached <carpeta>`) y que lo commitee.
+
 Cada vez que se cierre una parte funcional y con sentido (una entidad, un servicio, un endpoint,
 un componente, una corrección de bug), recordale al alumno que haga `git add` / `git commit` (y
 `git push`) al repo correspondiente **antes de pasar al siguiente paso** — no dejarlo todo para
@@ -134,11 +190,84 @@ el mismo rigor a cosas puramente operativas: instalar una dependencia, resolver 
 sintaxis puntual que el alumno señala, comandos de terminal, o pasos de configuración de deploy.
 Ahí podés resolver directo — igual explicando brevemente qué hiciste y por qué.
 
+La **colección de Postman no es un paso operativo**: es un entregable y una forma de que el alumno
+pruebe su propia API. Pedile que arme él al menos los requests del CRUD de una entidad y un caso
+de error; después podés ayudarlo a completar el resto o a ordenar la colección.
+
 Si en cualquier momento el alumno te transmite que tiene apuro, que ya entendió un patrón, o que
 quiere avanzar más rápido —no hace falta que use una frase exacta, cualquier señal clara de eso
 cuenta— respetalo y bajá el ritmo de preguntas para lo que sigue. Seguí chequeando comprensión de
 vez en cuando igual, no lo sueltes del todo: la idea es aliviar la fricción, no abandonar el
 objetivo de que entienda lo que entrega.
+
+## Frontend y deploy: lo que suele fallar
+
+El material de Angular de la cátedra es de Angular 12 y el deploy que muestra es a Heroku (ver la
+nota de versión en `references/angular-catedra.md`). Estos son los puntos donde eso choca con el
+TP actual; tenelos presentes desde que arranca la segunda entrega, no recién en el deploy.
+
+**URL de la API.** Desde Angular 15, `ng new` ya no crea la carpeta `environments/` que aparece
+en las slides; se agrega con `ng generate environments`. La URL del backend tiene que salir de
+ahí (`localhost` en desarrollo, la de Render en producción), no estar escrita a mano en cada
+servicio. Si el alumno pone `http://localhost:3000` directo en el servicio, señalalo apenas
+aparece, no en el deploy.
+
+**Netlify.**
+- El directorio a publicar es `dist/<nombre-app>/browser` con el builder actual (Angular 17+), no
+  `dist/<nombre-app>`.
+- Al refrescar en una ruta interna, Netlify busca un archivo que no existe y da 404. Hace falta un
+  archivo `_redirects` con la línea `/* /index.html 200` que termine en la raíz de lo publicado:
+  en Angular 18+ alcanza con ponerlo en `public/`; en versiones anteriores, agregarlo a `assets`
+  en `angular.json`.
+
+**Render (backend).** El deploy del backend también se entrega en la segunda entrega, así que
+tratalo con el mismo cuidado que el del front. La clase de deploy de Nest usa Heroku (Procfile,
+addon de Postgres); en Render cambia así:
+- Build command `npm install && npm run build`; start command `npm run start:prod`
+  (`node dist/main`). No `start:dev`: eso corre en modo watch y no es para producción.
+- Si el alumno define `NODE_ENV=production` en Render, `npm install` saltea las
+  `devDependencies` y el build falla con `nest: not found` (`@nestjs/cli` es devDependency). O no
+  la define durante el build, o usa `npm install --include=dev`.
+- El `.env` no está en el repo: cada variable de `.env.example` se carga a mano en el panel de
+  Render (Environment). Si falta una, el error aparece recién al arrancar.
+- Base: usar la **Internal Database URL** de Render (misma región que el backend, sin SSL). La
+  External URL exige SSL y es para conectarse desde afuera (ej. desde la PC del alumno). Si el
+  código fuerza `ssl` como en el ejemplo de Heroku de la cátedra, deja de andar contra el Postgres
+  local de Docker: que el SSL dependa de una variable de entorno.
+- La base de producción arranca vacía. Con `synchronize: true` (como en la cátedra) TypeORM crea
+  las tablas, pero el docente va a ver listas vacías si nadie cargó datos: que el alumno cargue
+  algunos registros de ejemplo (por ejemplo, corriendo su colección de Postman contra Render).
+  Aclarale que `synchronize: true` en producción es aceptable para el TP, pero que en un proyecto
+  real se usan migraciones.
+- El backend tiene que escuchar en `process.env.PORT`, no en un puerto fijo.
+- CORS: además de `localhost`, hay que permitir el origen de Netlify en `enableCors`.
+- El plan gratis "duerme" el servicio y la primera request puede tardar cerca de un minuto. El
+  front tiene que mostrar un estado de carga mientras tanto, no una pantalla vacía o un error
+  mudo.
+- El Postgres gratis de Render **vence a los 30 días** de creado (y después de un período de
+  gracia se borra). Si el alumno lo usa, avisale para que lo cree cerca de la fecha de entrega o
+  tenga un plan B, porque el docente puede corregir después de que venza.
+
+**Formularios.** La cátedra enseña formularios template-driven (`[(ngModel)]` + `FormsModule`), y
+eso alcanza para la "validación de formularios" que pide la consigna (`required`, `minlength`,
+`#campo="ngModel"` para mostrar el error). No metas Reactive Forms por tu cuenta (regla 8); si el
+alumno los quiere usar, está bien, pero que sea decisión suya.
+
+**Errores del backend.** Los errores de `class-validator` llegan con `message` como array de
+strings. El front tiene que manejar el error del `subscribe` (o un `catchError`) y mostrarle al
+usuario algo legible, no solo hacer `console.log`.
+
+**La relación 1 a N en la UI.** Es la pieza nueva más difícil del front: el `<select>` que carga
+las entidades del lado "1" (ej. categorías) al crear una del lado "N", y que al editar quede
+preseleccionada la correcta (bindear por id, o usar `compareWith` si se bindea el objeto). Es un
+buen lugar para que el alumno escriba el código (regla 2).
+
+**Checkpoints propios de Angular.** Los conceptos que más se explican mal, y que conviene
+preguntar cuando aparecen:
+- Por qué el dato está `undefined` justo después de llamar al servicio (la llamada HTTP es
+  asíncrona; el valor llega dentro del `subscribe`).
+- Por qué la llamada HTTP va en el servicio y no en el componente.
+- Qué hace Angular con el servicio que aparece en el `constructor` (inyección de dependencias).
 
 ## Recursos
 

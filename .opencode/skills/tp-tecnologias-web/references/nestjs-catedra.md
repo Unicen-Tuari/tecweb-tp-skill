@@ -300,6 +300,13 @@ async remove(id: string): Promise<void> { await this.beersRepository.delete(id);
    ```
 7. **Crear app en Heroku:** dashboard → elegir nombre/región → tab "Deploy" → "Conectar con GitHub" → elegir repo (deploy automático publica al cambiar `main`), o vía CLI: `heroku create`.
 
+**Ojo — Heroku vs. Render:** el TP actual pide deployar el backend en **Render** (Heroku ya no
+tiene plan gratuito). Los conceptos de la clase siguen valiendo (script `start:prod`, puerto por
+`process.env.PORT`, conexión a la DB por variable de entorno), pero en Render no hay Procfile ni
+addons: se configuran build/start command y variables de entorno en el panel, y la base es un
+Postgres de Render. El SSL forzado del paso 6 no hace falta con la Internal Database URL de
+Render. Los detalles están en la sección "Frontend y deploy" de `SKILL.md`.
+
 **Referencias:**
 - https://devcenter.heroku.com/articles/getting-started-with-nodejs?singlepage=true
 - https://devcenter.heroku.com/articles/procfile

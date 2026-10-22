@@ -7,6 +7,33 @@ Al publicar una versión nueva: subí el número en
 `.opencode/skills/tp-tecnologias-web/VERSION` (formato `MAJOR.MINOR.PATH`, sin la `v`) y agregá
 una entrada acá arriba de todo.
 
+## 1.1.0 — 2026-10-21
+
+Ajustes a partir de revisar los primeros TPs entregados (Entrega 1) y sus logs de sesión, más
+lo que conviene tener previsto para la Entrega 2 (Angular + deploy):
+
+- Antes del primer commit se verifica el `.gitignore` (`nest new --skip-git` no lo crea y
+  `node_modules/` terminaba en el repo).
+- El chequeo final de la primera entrega ahora incluye que el repo sea reproducible: README
+  propio, `.env.example`, `docker-compose.yml`, nada de `node_modules`/`dist`/datos de la base
+  en el repo, y filtros inválidos que respondan 400.
+- Checkpoints más estrictos: no se valida una respuesta con el porqué equivocado, y después de
+  corregir se pide que el alumno lo reformule antes de avanzar.
+- La primera vez que aparece cada pieza nueva, el intento del alumno tiene que ser código suyo,
+  no solo una descripción.
+- La colección de Postman deja de tratarse como paso operativo: el alumno arma al menos una parte.
+- Nueva sección "Frontend y deploy: lo que suele fallar": URL de la API por `environments`,
+  publish dir y `_redirects` en Netlify; deploy de Nest en Render (build/start command,
+  `NODE_ENV` y devDependencies, variables de entorno, Internal Database URL y SSL, base vacía,
+  `PORT`, CORS, servicio dormido, vencimiento del Postgres gratis); formularios template-driven,
+  errores del backend en la UI, el `<select>` de la relación y checkpoints propios de Angular.
+- El chequeo final de la segunda entrega verifica los dos deploys (backend de Render con datos y
+  la colección de Postman funcionando contra él; front en incógnito, refresh en ruta interna, nada
+  de `localhost` en el build, errores visibles en la UI).
+- La referencia de NestJS aclara qué cambia de la clase de deploy (Heroku) al usar Render.
+- La nota de versión de Angular suma los cambios de v15 (`environments`), v18 (`public/`) y v20
+  (nombres de archivo sin sufijo).
+
 ## 1.0.0 — 2026-08-28
 
 Primera versión con versionado formal. Incluye todo el trabajo hecho hasta acá:
