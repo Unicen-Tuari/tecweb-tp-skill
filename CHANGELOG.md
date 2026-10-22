@@ -23,11 +23,14 @@ lo que conviene tener previsto para la Entrega 2 (Angular + deploy):
   no solo una descripción.
 - La colección de Postman deja de tratarse como paso operativo: el alumno arma al menos una parte.
 - Nueva sección "Frontend y deploy: lo que suele fallar": URL de la API por `environments`,
-  publish dir y `_redirects` en Netlify, `PORT`/CORS/servicio dormido/vencimiento del Postgres
-  gratis en Render, formularios template-driven, errores del backend en la UI, el `<select>` de
-  la relación y checkpoints propios de Angular.
-- El chequeo final de la segunda entrega verifica los deploys (incógnito, refresh en ruta
-  interna, nada de `localhost` en el build, errores visibles en la UI).
+  publish dir y `_redirects` en Netlify; deploy de Nest en Render (build/start command,
+  `NODE_ENV` y devDependencies, variables de entorno, Internal Database URL y SSL, base vacía,
+  `PORT`, CORS, servicio dormido, vencimiento del Postgres gratis); formularios template-driven,
+  errores del backend en la UI, el `<select>` de la relación y checkpoints propios de Angular.
+- El chequeo final de la segunda entrega verifica los dos deploys (backend de Render con datos y
+  la colección de Postman funcionando contra él; front en incógnito, refresh en ruta interna, nada
+  de `localhost` en el build, errores visibles en la UI).
+- La referencia de NestJS aclara qué cambia de la clase de deploy (Heroku) al usar Render.
 - La nota de versión de Angular suma los cambios de v15 (`environments`), v18 (`public/`) y v20
   (nombres de archivo sin sufijo).
 

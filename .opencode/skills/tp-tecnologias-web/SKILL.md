@@ -128,7 +128,11 @@ levantar por alguien que no sea el alumno (el docente lo va a clonar y correr):
 
 Para la segunda entrega, lo mismo pero mirando los deploys (el docente va a abrir las URLs, no
 el código local):
-- `README.md` propio del front con las URLs de los dos deploys.
+- `README.md` propio del front con las URLs de los dos deploys, y el README del backend
+  actualizado con la URL de Render.
+- La URL de Render responde por sí sola (ej. el `GET` del listado en el navegador), con datos
+  cargados, y la colección de Postman funciona contra Render cambiando solo la URL base (una
+  variable de la colección, ej. `{{baseUrl}}`, no URLs escritas a mano en cada request).
 - La app de Netlify, abierta en una ventana de incógnito, carga datos del backend de Render — y
   refrescar en una ruta interna (ej. `/productos/3`) no da 404.
 - El build de producción no apunta a `localhost` (buscar `localhost` en el código del front).
@@ -216,7 +220,25 @@ aparece, no en el deploy.
   en Angular 18+ alcanza con ponerlo en `public/`; en versiones anteriores, agregarlo a `assets`
   en `angular.json`.
 
-**Render (backend).**
+**Render (backend).** El deploy del backend también se entrega en la segunda entrega, así que
+tratalo con el mismo cuidado que el del front. La clase de deploy de Nest usa Heroku (Procfile,
+addon de Postgres); en Render cambia así:
+- Build command `npm install && npm run build`; start command `npm run start:prod`
+  (`node dist/main`). No `start:dev`: eso corre en modo watch y no es para producción.
+- Si el alumno define `NODE_ENV=production` en Render, `npm install` saltea las
+  `devDependencies` y el build falla con `nest: not found` (`@nestjs/cli` es devDependency). O no
+  la define durante el build, o usa `npm install --include=dev`.
+- El `.env` no está en el repo: cada variable de `.env.example` se carga a mano en el panel de
+  Render (Environment). Si falta una, el error aparece recién al arrancar.
+- Base: usar la **Internal Database URL** de Render (misma región que el backend, sin SSL). La
+  External URL exige SSL y es para conectarse desde afuera (ej. desde la PC del alumno). Si el
+  código fuerza `ssl` como en el ejemplo de Heroku de la cátedra, deja de andar contra el Postgres
+  local de Docker: que el SSL dependa de una variable de entorno.
+- La base de producción arranca vacía. Con `synchronize: true` (como en la cátedra) TypeORM crea
+  las tablas, pero el docente va a ver listas vacías si nadie cargó datos: que el alumno cargue
+  algunos registros de ejemplo (por ejemplo, corriendo su colección de Postman contra Render).
+  Aclarale que `synchronize: true` en producción es aceptable para el TP, pero que en un proyecto
+  real se usan migraciones.
 - El backend tiene que escuchar en `process.env.PORT`, no en un puerto fijo.
 - CORS: además de `localhost`, hay que permitir el origen de Netlify en `enableCors`.
 - El plan gratis "duerme" el servicio y la primera request puede tardar cerca de un minuto. El
